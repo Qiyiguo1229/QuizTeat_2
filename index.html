@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>無線電機操作與保養｜刷題練習</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Shippori+Mincho:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">37</span>
+        <div>
+          <p class="brand-name">無線電機操作與保養</p>
+          <p class="brand-sub">陸軍通信電子資訊訓練中心題庫 · 112-1-0014</p>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="view-home" class="view is-visible">
+        <div class="hero">
+          <h1>刷題練習</h1>
+          <p>共 <strong id="total-count">0</strong> 題 · 是非 / 選擇 / 複選</p>
+        </div>
+
+        <div class="mode-grid">
+          <button type="button" class="mode-card" data-mode="all">
+            <span class="mode-label">全部題目</span>
+          </button>
+          <button type="button" class="mode-card" data-mode="random">
+            <span class="mode-label">隨機練習</span>
+          </button>
+          <button type="button" class="mode-card" data-mode="tf">
+            <span class="mode-label">是非題</span>
+            <span class="mode-desc" id="count-tf">30 題</span>
+          </button>
+          <button type="button" class="mode-card" data-mode="single">
+            <span class="mode-label">選擇題</span>
+            <span class="mode-desc" id="count-single">30 題</span>
+          </button>
+          <button type="button" class="mode-card" data-mode="multi">
+            <span class="mode-label">複選題</span>
+            <span class="mode-desc" id="count-multi">30 題</span>
+          </button>
+          <button type="button" class="mode-card mode-exam" data-mode="exam">
+            <span class="mode-label">模擬考試</span>
+            <span class="mode-desc">40 題 · 70% 及格</span>
+          </button>
+        </div>
+      </section>
+
+      <section id="view-quiz" class="view">
+        <div class="quiz-toolbar">
+          <button type="button" class="ghost" id="btn-exit">離開</button>
+          <div class="progress-wrap">
+            <div class="progress-bar"><span id="progress-fill"></span></div>
+            <span id="progress-text">1 / 1</span>
+          </div>
+          <div class="score-chip" id="live-score">0 分</div>
+        </div>
+
+        <article class="question-card" id="question-card">
+          <div class="q-meta">
+            <span class="tag" id="q-type"></span>
+            <span class="tag tag-diff" id="q-diff"></span>
+            <span class="q-id" id="q-id"></span>
+          </div>
+          <h2 id="q-text"></h2>
+          <div id="q-options" class="options"></div>
+          <div id="q-feedback" class="feedback" hidden></div>
+          <div class="q-actions">
+            <button type="button" class="ghost" id="btn-skip">略過</button>
+            <button type="button" class="primary" id="btn-submit">送出答案</button>
+            <button type="button" class="primary" id="btn-next" hidden>下一題</button>
+          </div>
+        </article>
+      </section>
+
+      <section id="view-result" class="view">
+        <div class="result-panel">
+          <h2 id="result-title">練習結束</h2>
+          <p class="result-score" id="result-score"></p>
+          <p id="result-detail"></p>
+          <div class="result-actions">
+            <button type="button" class="primary" id="btn-retry">再練一次</button>
+            <button type="button" class="ghost" id="btn-home">回首頁</button>
+          </div>
+          <div id="result-wrong-block" class="result-wrong-block" hidden>
+            <h3>本回合錯題</h3>
+            <ul id="result-wrong-list" class="wrong-list"></ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>題庫來源：掃描題本整理 · 僅供個人練習</p>
+    </footer>
+  </div>
+  <script src="js/questions.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
