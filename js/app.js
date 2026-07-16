@@ -7,7 +7,7 @@
     correct: 0,
     answered: 0,
     mode: null,
-    instant: false,
+    instant: true,
     selected: new Set(),
     locked: false,
     sessionWrongDetails: [],
@@ -72,7 +72,7 @@
 
   function startQuiz(mode) {
     state.mode = mode;
-    state.instant = false;
+    state.instant = true;
     state.queue = filterBank(mode);
     state.index = 0;
     state.correct = 0;
@@ -120,17 +120,22 @@
     state.locked = false;
     els.qFeedback.hidden = true;
     els.qFeedback.textContent = "";
-    els.btnSubmit.hidden = false;
-    els.btnSubmit.disabled = true;
-    els.btnSubmit.textContent =
-      state.index >= state.queue.length - 1 ? "送出並結束" : "下一題";
+    els.btnSubmit.textContent = "送出答案";
     els.btnNext.hidden = true;
+    els.btnNext.textContent =
+      state.index >= state.queue.length - 1 ? "結束" : "下一題";
+    // 是非／單選不需送出鈕；複選才顯示
+    const needSubmit = q.type === "multi";
+    els.btnSubmit.hidden = !needSubmit;
+    els.btnSubmit.disabled = true;
 
     const total = state.queue.length;
     const pct = (state.index / total) * 100;
     els.progressFill.style.width = `${pct}%`;
     els.progressText.textContent = `${state.index + 1} / ${total}`;
-    els.liveScore.textContent = `已答 ${state.answered}`;
+    els.liveScore.textContent = state.answered
+      ? `${Math.round((state.correct / state.answered) * 100)} 分`
+      : "— 分";
 
     els.qType.textContent = typeLabel[q.type] || q.type;
     els.qDiff.textContent = q.difficulty;
@@ -172,12 +177,16 @@
       if (multi) {
         if (input.checked) state.selected.add(value);
         else state.selected.delete(value);
+        label.classList.toggle("is-selected", input.checked);
+        els.btnSubmit.disabled = state.selected.size === 0;
       } else {
         state.selected = new Set([value]);
         els.qOptions.querySelectorAll(".option").forEach((el) => el.classList.remove("is-selected"));
+        label.classList.add("is-selected");
+        els.btnSubmit.disabled = false;
+        // 是非／單選：點選即送出
+        submitAnswer();
       }
-      label.classList.toggle("is-selected", input.checked);
-      els.btnSubmit.disabled = state.selected.size === 0;
     });
     return label;
   }
@@ -209,7 +218,33 @@
       });
     }
 
-    nextQuestion();
+    const optionEls = [...els.qOptions.querySelectorAll(".option")];
+    optionEls.forEach((el) => {
+      const input = el.querySelector("input");
+      input.disabled = true;
+      const val = Number(input.value);
+      if (correct.includes(val)) el.classList.add("is-correct");
+      if (state.selected.has(val) && !correct.includes(val)) el.classList.add("is-wrong");
+    });
+
+    els.qFeedback.hidden = false;
+    els.qFeedback.className = `feedback ${ok ? "ok" : "bad"}`;
+    els.qFeedback.innerHTML = ok
+      ? `答對了。`
+      : `答錯了。正解：${formatAnswer(q)}`;
+
+    els.btnSubmit.hidden = true;
+    els.liveScore.textContent = `${Math.round((state.correct / state.answered) * 100)} 分`;
+
+    if (ok) {
+      nextQuestion();
+      return;
+    }
+
+    els.btnNext.hidden = false;
+    els.btnNext.textContent =
+      state.index >= state.queue.length - 1 ? "結束" : "下一題";
+    els.btnNext.focus();
   }
 
   function nextQuestion() {
