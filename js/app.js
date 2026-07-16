@@ -34,7 +34,6 @@
     qFeedback: document.getElementById("q-feedback"),
     btnSubmit: document.getElementById("btn-submit"),
     btnNext: document.getElementById("btn-next"),
-    btnSkip: document.getElementById("btn-skip"),
     btnExit: document.getElementById("btn-exit"),
     resultTitle: document.getElementById("result-title"),
     resultScore: document.getElementById("result-score"),
@@ -298,14 +297,6 @@
 
     els.btnSubmit.addEventListener("click", submitAnswer);
     els.btnNext.addEventListener("click", nextQuestion);
-    els.btnSkip.addEventListener("click", () => {
-      if (state.locked) nextQuestion();
-      else {
-        state.index += 1;
-        if (state.index >= state.queue.length) finishQuiz();
-        else renderQuestion();
-      }
-    });
     els.btnExit.addEventListener("click", () => {
       if (confirm("確定離開目前練習？")) showView("home");
     });
